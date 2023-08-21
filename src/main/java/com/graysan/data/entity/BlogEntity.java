@@ -1,5 +1,6 @@
 package com.graysan.data.entity;
 
+import com.graysan.data.BlogEntityEmbeddable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,13 +31,8 @@ public class BlogEntity implements Serializable {
     @Column(name = "blog_id", unique = true, nullable = false, insertable = true, updatable = false)
     private Long blogId;
 
-    // Header
-    @Column(name = "header", length = 500, columnDefinition = "varchar(500) default 'başlık yazılmadı... '")
-    private String header;
-
-    // Content
-    @Lob
-    private String content;
+    @Embedded
+    private BlogEntityEmbeddable blogEntityEmbeddable = new BlogEntityEmbeddable();
 
     // Date
     @CreationTimestamp
