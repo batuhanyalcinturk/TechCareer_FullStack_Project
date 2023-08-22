@@ -3,6 +3,7 @@ package com.graysan;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.TimeZone;
 
@@ -17,11 +18,13 @@ import java.util.TimeZone;
 // @EnableAsync
 
 // SCAN
-// @EntityScan(basePackages = "com.hamitmizrak.data.entity") //Entity bulamadığı zaman
-// @EnableJpaRepositories(basePackages = "com.hamitmizrak.data.repository") //Repository bulamadığı zaman
+// @EntityScan(basePackages = "com.graysan.data.entity") //Entity bulamadığı zaman
+// @EnableJpaRepositories(basePackages = "com.graysan.data.repository") //Repository bulamadığı zaman
 
 // Spring Cache aktif etmek gerekiyor.
 // @EnableCaching
+
+@EnableJpaAuditing(auditorAwareRef = "auditorAwareBeanMethod")
 
 // Spring Security
 @SpringBootApplication(exclude = {
