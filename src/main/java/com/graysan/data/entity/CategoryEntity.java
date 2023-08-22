@@ -3,6 +3,7 @@ package com.graysan.data.entity;
 import com.graysan.auditing.AuditingAwareBaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -13,6 +14,7 @@ import java.util.List;
 //Lombok
 @Data
 @Log4j2
+@ToString
 //Entity
 @Entity
 @Table(name = "categories")

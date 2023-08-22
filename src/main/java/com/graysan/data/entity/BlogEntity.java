@@ -4,6 +4,7 @@ import com.graysan.auditing.AuditingAwareBaseEntity;
 import com.graysan.data.BlogEntityEmbeddable;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 //Lombok
 @Data
 @Log4j2
+@ToString
 //Entity
 @Entity
 @Table(name = "blogs")
