@@ -28,6 +28,6 @@ public interface ICategoryServices<D,E> {
     // All Delete
     public String categoryServiceAllDelete();
     // Speed Data
-    public List<CategoryDto> categoryServiceSpeedData(int key);
+    public List<CategoryDto> categoryServiceSpeedData(Long key);
 
 }

@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +35,7 @@ public class CategoryApiImpl implements ICategoryApi<CategoryDto> {
     }
 
     @Override
+    @PostMapping("/create")
     public ResponseEntity<?> categoryApiCreate(@Valid @RequestBody CategoryDto categoryDto) {
         // return new ResponseEntity<>(iCategoryServices.categoryServiceCreate(categoryDto), HttpStatus.OK);
         // return ResponseEntity.status(HttpStatus.OK).body(iCategoryServices.categoryServiceCreate(categoryDto));
@@ -51,32 +49,37 @@ public class CategoryApiImpl implements ICategoryApi<CategoryDto> {
     }
 
     @Override
+    @GetMapping("/list")
     public ResponseEntity<List<CategoryDto>> categoryApiList() {
-        return null;
+        return ResponseEntity.ok(iCategoryServices.categoryServiceList());
     }
 
     @Override
+    @GetMapping("/find")
     public ResponseEntity categoryApiFind(Long id) {
-        return null;
+        return ResponseEntity.ok(iCategoryServices.categoryServiceFind(id));
     }
 
     @Override
-    public ResponseEntity categoryApiUpdate(Long id, CategoryDto categoryDto) {
-        return null;
+    @PutMapping(value = "update/{id}")
+    public ResponseEntity<?> categoryApiUpdate(@PathVariable(name = "id") Long id, @Valid @RequestBody CategoryDto categoryDto) {
+        return ResponseEntity.ok(iCategoryServices.categoryServiceUpdate(id, categoryDto));
     }
 
     @Override
-    public ResponseEntity categoryApiDelete(Long id) {
-        return null;
+    @PutMapping("/delete/{id}")
+    public ResponseEntity categoryApiDelete(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(iCategoryServices.categoryServiceDelete(id));
     }
 
     @Override
+    @GetMapping(value = "/all/delete")
     public ResponseEntity<String> categoryApiAllDelete() {
-        return null;
+        return ResponseEntity.ok(iCategoryServices.categoryServiceAllDelete());
     }
 
     @Override
-    public ResponseEntity<List<CategoryDto>> categoryApiSpeedData(int key) {
-        return null;
+    public ResponseEntity<List<CategoryDto>> categoryApiSpeedData(Long key) {
+        return ResponseEntity.ok(iCategoryServices.categoryServiceSpeedData(key));
     }
 }
