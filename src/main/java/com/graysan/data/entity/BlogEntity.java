@@ -3,10 +3,7 @@ package com.graysan.data.entity;
 import com.graysan.auditing.AuditingAwareBaseEntity;
 import com.graysan.data.BlogEntityEmbeddable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,9 +12,6 @@ import java.util.Date;
 
 //Lombok
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Log4j2
 //Entity
 @Entity
@@ -45,4 +39,19 @@ public class BlogEntity extends AuditingAwareBaseEntity implements Serializable 
     private String justJava;
     */
 
+    // RELATION
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    CategoryEntity relationCategoryEntity;
+
+    // CONSTRUCTOR
+
+
+    public BlogEntity() {
+    }
+
+    public BlogEntity(BlogEntityEmbeddable blogEntityEmbeddable, CategoryEntity relationCategoryEntity) {
+        this.blogEntityEmbeddable = blogEntityEmbeddable;
+        this.relationCategoryEntity = relationCategoryEntity;
+    }
 }
