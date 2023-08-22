@@ -1,5 +1,6 @@
 package com.graysan.data.entity;
 
+import com.graysan.auditing.AuditingAwareBaseEntity;
 import com.graysan.data.BlogEntityEmbeddable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Date;
 //Entity
 @Entity
 @Table(name = "blogs")
-public class BlogEntity implements Serializable {
+public class BlogEntity extends AuditingAwareBaseEntity implements Serializable {
 
     public static final Long serialVersionUID = 1L;
 

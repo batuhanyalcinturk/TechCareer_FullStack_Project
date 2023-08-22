@@ -1,5 +1,6 @@
 package com.graysan.data.entity;
 
+import com.graysan.auditing.AuditingAwareBaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import java.util.Date;
 //Entity
 @Entity
 @Table(name = "categories")
-public class CategoryEntity implements Serializable {
+public class CategoryEntity extends AuditingAwareBaseEntity implements Serializable {
 
     public static final Long serialVersionUID = 1L;
 
