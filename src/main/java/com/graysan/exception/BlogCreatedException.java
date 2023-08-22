@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 // 201: Created
 @ResponseStatus(HttpStatus.CREATED)
-public class CreatedException extends RuntimeException{
+public class BlogCreatedException extends RuntimeException{
 
-    public CreatedException(String message){
+    public BlogCreatedException(String message){
         super(message);
     }
 }

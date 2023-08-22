@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 // 404:Bulunamadı
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class NotFoundException extends RuntimeException {
-    public NotFoundException(String message){
+public class BlogNotFoundException extends RuntimeException {
+    public BlogNotFoundException(String message){
         super(message);
     }
 }

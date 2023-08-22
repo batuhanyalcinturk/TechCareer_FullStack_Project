@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 // 400:Kötü istek
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class BadRequestException extends RuntimeException{
-    public BadRequestException(String message){
+public class BlogBadRequestException extends RuntimeException{
+    public BlogBadRequestException(String message){
         super(message);
     }
 
