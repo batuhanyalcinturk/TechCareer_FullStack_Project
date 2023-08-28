@@ -26,29 +26,32 @@ public class CommandLineRunnerBean {
     private final ICategoryRepository iCategoryRepository;
     private final ModelMapperBean modelMapperBean;
 
-    // categorySave
-    public CategoryEntity categoryEntitySave(String categoryName){
+    // category Save
+    public CategoryEntity categoryEntitySave(String categoryName) {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setCategoryName(categoryName);
         iCategoryRepository.save(categoryEntity);
         return categoryEntity;
     }
 
-    public void userData(){
+    // Kullanıcıdan aldığım verileri database kaydetsin
+    public void userData() {
         for (int i = 1; i <= 3; i++) {
-            //String user = JOptionPane.showInputDialog(i + ".ci Kategori adını yazınız");
+            //String user= JOptionPane.showInputDialog(i+".ci Kategori Lütfen Kategori adını yazınız ");
             Scanner scanner = new Scanner(System.in);
-            System.out.println(i + ".ci Kategori adını yazınız");
+            System.out.println("\n");
+            System.out.println(i + ".ci Kategori Lütfen Kategori adını yazınız");
             String userName = scanner.nextLine().toUpperCase();
             categoryEntitySave(userName);
         }
     }
 
     // Kategori Listesi
-    public Iterable<CategoryEntity> categoryEntitiesList(){
+    public Iterable<CategoryEntity> categoryEntitiesList() {
         return iCategoryRepository.findAll();
     }
 
+    //
     @Bean
     @Transactional // save, delete, update
     public void blogCategorySave() {
@@ -84,10 +87,12 @@ public class CommandLineRunnerBean {
     }
 
     // CLR
-    public CommandLineRunner commandLineRunnerMethod(){
+    public CommandLineRunner commandLineRunnerMethod() {
         return args -> {
-            log.info("Data set oluşturulmuştur");
-            blogCategorySave();
-        };
-    }
-}
+            System.out.println("DATA444444444444");
+            log.info("Data set oluşturulmuştur.");
+            //blogCategorySave();
+        }; //end retur
+    } //end CommandLineRunnerBean method
+} // end class
+
