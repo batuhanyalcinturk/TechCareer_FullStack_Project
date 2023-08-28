@@ -20,40 +20,31 @@ import java.util.Date;
 @Table(name = "blogs")
 public class BlogEntity extends AuditingAwareBaseEntity implements Serializable {
 
+    // serileştirme
     public static final Long serialVersionUID = 1L;
 
     // ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_id", unique = true, nullable = false, insertable = true, updatable = false)
+    @Column(name="blog_id",unique = true,nullable = false,insertable = true,updatable = false)
     private Long blogId;
 
+    // Embedded
     @Embedded
-    private BlogEntityEmbeddable blogEntityEmbeddable = new BlogEntityEmbeddable();
+    private BlogEntityEmbeddable blogEntityEmbeddable=new BlogEntityEmbeddable();
 
-    // Date
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date systemDate;
+    //  RELATION
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="category_id",nullable = false)
+    private CategoryEntity relationCategoryEntity;
 
-    /* DB de olmasın Javada olsun
-    @Transient
-    private String justJava;
-    */
-
-    // RELATION
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
-    CategoryEntity relationCategoryEntity;
-
-    // CONSTRUCTOR
-
-
+    // Constructor (Parametresiz)
     public BlogEntity() {
     }
 
+    // Constructor (Parametreli)
     public BlogEntity(BlogEntityEmbeddable blogEntityEmbeddable, CategoryEntity relationCategoryEntity) {
         this.blogEntityEmbeddable = blogEntityEmbeddable;
         this.relationCategoryEntity = relationCategoryEntity;
     }
-}
+} //end class

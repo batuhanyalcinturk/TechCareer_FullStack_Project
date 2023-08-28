@@ -18,15 +18,32 @@ import java.util.List;
 // LOMBOK
 @RequiredArgsConstructor
 @Log4j2
-// SERVICE
+
+// SERVICES
 @Service
 public class CategoryServiceImpl implements ICategoryServices<CategoryDto, CategoryEntity> {
 
-    // Injection
+    // Injection (Field) => 1.YOL
+    /*
+    @Autowired
+    private ICategoryRepository iCategoryRepository;
+    */
+
+    // Injection (Constructor Field) => 2.YOL
+    /*
+    private final ICategoryRepository iCategoryRepository;
+    @Autowired
+    public CategoryServicesImpl(ICategoryRepository iCategoryRepository) {
+        this.iCategoryRepository = iCategoryRepository;
+    }
+    */
+
+    // Injection (Lombok Constructor Field) => 3.YOL
     private final ICategoryRepository iCategoryRepository;
     private final ModelMapperBean modelMapperBean;
 
-    // Model Mapper
+
+    // MODEL MAPPER
     @Override
     public CategoryDto entityToDto(CategoryEntity categoryEntity) {
         return modelMapperBean.modelMapperMethod().map(categoryEntity,CategoryDto.class);
@@ -34,110 +51,87 @@ public class CategoryServiceImpl implements ICategoryServices<CategoryDto, Categ
 
     @Override
     public CategoryEntity dtoToEntity(CategoryDto categoryDto) {
-        return modelMapperBean.modelMapperMethod().map(categoryDto, CategoryEntity.class);
+        return  modelMapperBean.modelMapperMethod().map(categoryDto,CategoryEntity.class);
     }
 
-    // Create
+    // CREATE
     @Override
-    @Transactional // create , update , delete
+    @Transactional // create, delete, update
     public CategoryDto categoryServiceCreate(CategoryDto categoryDto) {
-        if (categoryDto != null){
-            CategoryEntity dtoToEntityChange = dtoToEntity(categoryDto);
-            CategoryEntity categoryEntity = iCategoryRepository.save(dtoToEntityChange);
-            // kaydettikten sonra id alsın döndersin
+        if(categoryDto!=null){
+            CategoryEntity categoryEntity=dtoToEntity(categoryDto);
+            iCategoryRepository.save(categoryEntity);
             categoryDto.setId(categoryEntity.getCategoryId());
             categoryDto.setSystemDate(categoryEntity.getSystemDate());
-
-        }else {
-            throw new NullPointerException("Category Dto null");
+        }else{
+            throw  new NullPointerException( " CategoryDto null veri");
         }
         return categoryDto;
     }
-    // List
+
+    // LIST
     @Override
     public List<CategoryDto> categoryServiceList() {
-        // CategoryEntity List
-        Iterable<CategoryEntity> categoryEntitiesList = iCategoryRepository.findAll();
-
-        // CategoryDto List
-        List<CategoryDto> categoryDtoList = new ArrayList<>();
-        // Bu döngü EntityList'i DtoList'e çevirsin
-        for (CategoryEntity entity : categoryEntitiesList) {
-            CategoryDto categoryDto = entityToDto(entity);
+        Iterable<CategoryEntity> entityIterable=  iCategoryRepository.findAll();
+        // Dto To entityb List
+        List<CategoryDto> categoryDtoList=new ArrayList<>();
+        for (CategoryEntity entity:  entityIterable) {
+            CategoryDto categoryDto=entityToDto(entity);
             categoryDtoList.add(categoryDto);
-            // eğer DB masking yapmak istiyorsak Bcrypted kullanabiliriz
         }
+        log.info("Liste Sayısı: "+categoryDtoList.size());
         return categoryDtoList;
     }
-    // Find
+
+    // FIND
     @Override
-    public CategoryDto categoryServiceFind(Long id) {
-        // 1. Yol - Optional get, isPresent
-        /*Optional<CategoryEntity> categoryFindEntity = iCategoryRepository.findById(id);
-        CategoryDto categoryDto = entityToDto(categoryFindEntity.get());
-        if (categoryFindEntity.isPresent()){
+    public CategoryDto categoryServiceFindById(Long id) {
+        // 1.YOL (FIND)
+        /*
+        Optional<CategoryEntity> findOptionalCategoryEntity=  iCategoryRepository.findById(id);
+        CategoryDto categoryDto=entityToDto(findOptionalCategoryEntity.get());
+        if(findOptionalCategoryEntity.isPresent()){
             return categoryDto;
-        }*/
+        }
+        */
 
-        // 2. Yol
-        CategoryEntity categoryEntity = null;
-        if(id != null && id != 0){
-            categoryEntity = iCategoryRepository.findById(id)
-                    .orElseThrow(() -> new BlogNotFoundException(id + " Nolu ID Bulunamadı.."));
-        } else if (id == null)
-            throw new GraysanException("Category id null değerdir");
-
-        return entityToDto(categoryEntity);
+        // 2.YOL (FIND)
+        CategoryEntity findCategoryEntity=  null;
+        if(id!=null){
+            findCategoryEntity=  iCategoryRepository.findById(id)
+                    .orElseThrow(()->new BlogNotFoundException(id+" nolu id yoktur"));
+        }else if(id==null) {
+            throw new GraysanException("İd null olarak geldi");
+        }
+        return entityToDto(findCategoryEntity);
     }
-    // Update
+
+    // UPDATE
     @Override
-    @Transactional // create , update , delete
+    @Transactional // create, delete, update
     public CategoryDto categoryServiceUpdate(Long id, CategoryDto categoryDto) {
-        // Öncelikle Nesneyi bul
-        CategoryDto categoryFindDto = categoryServiceFind(id);
-        if (categoryFindDto != null){
-            CategoryEntity categoryEntity = dtoToEntity(categoryFindDto);
+        // Önce Bul
+        CategoryDto categoryFindDto= categoryServiceFindById(id);
+        if(categoryFindDto!=null){
+            CategoryEntity categoryEntity=dtoToEntity(categoryFindDto);
             categoryEntity.setCategoryName(categoryDto.getCategoryName());
             iCategoryRepository.save(categoryEntity);
+            // Dönüştede ID ve Date Set et
         }
         return categoryDto;
     }
-    // Delete
+
+    // DELETE
     @Override
-    @Transactional // create , update , delete
-    public CategoryDto categoryServiceDelete(Long id) {
-        // Öncelikle Nesneyi bul
-        CategoryDto categoryFindDto = categoryServiceFind(id);
-        if (categoryFindDto != null){
-            CategoryEntity categoryEntity = dtoToEntity(categoryFindDto);
-            iCategoryRepository.delete(categoryEntity);
+    @Transactional // create, delete, update
+    public CategoryDto categoryServiceDeleteById(Long id) {
+        // Önce Bul
+        CategoryDto categoryFindDto= categoryServiceFindById(id);
+        if(categoryFindDto!=null){
+            iCategoryRepository.deleteById(id);
+            // Dönüştede ID ve Date Set et
         }
         return categoryFindDto;
     }
 
-    // All Delete
-    @Override
-    public String categoryServiceAllDelete() {
-        iCategoryRepository.deleteAll();
-        return "Silinen veri sayısı : " + categoryServiceList().size();
-    }
-
-    // Speed Data
-    @Override
-    public List<CategoryDto> categoryServiceSpeedData(Long key) {
-        CategoryDto categoryDto = null;
-        List<CategoryDto> categoryDtoList=new ArrayList<>();
-        int count = 0;
-        for (int i = 1; i <= key; i++) {
-            categoryDto = new CategoryDto();
-            categoryDto.setCategoryName("category adı: " + i);
-            categoryDtoList.add(categoryDto);
-            CategoryEntity categoryEntity=dtoToEntity(categoryDto);
-            iCategoryRepository.save(categoryEntity);
-            count++;
-        }
-        return categoryDtoList;
-    }
-
-
-}
+} //end class

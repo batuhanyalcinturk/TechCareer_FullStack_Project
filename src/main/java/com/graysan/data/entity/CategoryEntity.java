@@ -20,34 +20,40 @@ import java.util.List;
 @Table(name = "categories")
 public class CategoryEntity extends AuditingAwareBaseEntity implements Serializable {
 
+    // serileştirme
     public static final Long serialVersionUID = 1L;
 
     // ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id", unique = true, nullable = false, insertable = true, updatable = false)
+    @Column(name="category_id",unique = true,nullable = false,insertable = true,updatable = false)
     private Long categoryId;
 
-    // Header
-    @Column(name = "category_name", length = 500, columnDefinition = "varchar(500) default 'java'")
+    // CATEGORY NAME
+    @Column(name = "category_name")
     private String categoryName;
 
-    // Date
+    // DATE
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date systemDate;
 
     // RELATION
-    @OneToMany(mappedBy = "relationCategoryEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "relationCategoryEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     List<BlogEntity> relationBlogEntityList;
 
-    // Constructor
-
-
+    // Constructor (parametresiz)
     public CategoryEntity() {
     }
 
+    // Constructor (parametreli)
     public CategoryEntity(String categoryName) {
         this.categoryName = categoryName;
     }
-}
+
+    // Constructor (parametreli)
+    public CategoryEntity(String categoryName, List<BlogEntity> relationBlogEntityList) {
+        this.categoryName = categoryName;
+        this.relationBlogEntityList = relationBlogEntityList;
+    }
+} //end class

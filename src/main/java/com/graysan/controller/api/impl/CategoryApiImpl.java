@@ -4,82 +4,79 @@ import com.graysan.assist.FrontEnd;
 import com.graysan.business.dto.CategoryDto;
 import com.graysan.business.services.ICategoryServices;
 import com.graysan.controller.api.ICategoryApi;
-import com.graysan.error.ApiResult;
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// Lombok
+// LOMBOK
 @RequiredArgsConstructor
 @Log4j2
 
 // API
 @RestController
+@CrossOrigin(origins = FrontEnd.REACT_URL) // http://localhost:3000
 @RequestMapping("/category/api/v1")
-@CrossOrigin(origins = FrontEnd.REACT_URL)
 public class CategoryApiImpl implements ICategoryApi<CategoryDto> {
 
     // Injection
     private final ICategoryServices iCategoryServices;
-    private ApiResult apiResult;
 
-    //
-    @PostConstruct
-    public void categoryPostConstruct(){
-        apiResult = new ApiResult();
-    }
-
+    // CREATE
+    // http://localhost:4444/category/api/v1/create
     @Override
     @PostMapping("/create")
     public ResponseEntity<?> categoryApiCreate(@Valid @RequestBody CategoryDto categoryDto) {
-        // return new ResponseEntity<>(iCategoryServices.categoryServiceCreate(categoryDto), HttpStatus.OK);
-        // return ResponseEntity.status(HttpStatus.OK).body(iCategoryServices.categoryServiceCreate(categoryDto));
-        // return ResponseEntity.status(200).body(iCategoryServices.categoryServiceCreate(categoryDto));
-        //return ResponseEntity.ok().body(iCategoryServices.categoryServiceCreate(categoryDto));
-        /*iCategoryServices.categoryServiceCreate(categoryDto);
-        apiResult = new ApiResult("path", "message", 200);
-        return ResponseEntity.ok().body(apiResult);
-        */
         return ResponseEntity.ok(iCategoryServices.categoryServiceCreate(categoryDto));
     }
 
+    // LIST
+    // http://localhost:4444/category/api/v1/list
     @Override
-    @GetMapping("/list")
+    @GetMapping(value="/list")
     public ResponseEntity<List<CategoryDto>> categoryApiList() {
-        return ResponseEntity.ok(iCategoryServices.categoryServiceList());
+        return ResponseEntity.status(HttpStatus.OK).body(iCategoryServices.categoryServiceList());
     }
 
+    // FIND
+    // http://localhost:4444/category/api/v1/find/1
     @Override
-    @GetMapping("/find")
-    public ResponseEntity categoryApiFind(Long id) {
-        return ResponseEntity.ok(iCategoryServices.categoryServiceFind(id));
+    @GetMapping(value="/find/{id}")
+    public ResponseEntity<?> categoryApiFindById(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.status(200).body(iCategoryServices.categoryServiceFindById(id));
     }
 
+    // UPDATE
+    // http://localhost:4444/category/api/v1/update/1
     @Override
-    @PutMapping(value = "update/{id}")
+    @PutMapping(value="/update/{id}")
     public ResponseEntity<?> categoryApiUpdate(@PathVariable(name = "id") Long id, @Valid @RequestBody CategoryDto categoryDto) {
-        return ResponseEntity.ok(iCategoryServices.categoryServiceUpdate(id, categoryDto));
+        return ResponseEntity.ok().body(iCategoryServices.categoryServiceUpdate(id,categoryDto));
     }
 
+    // DELETE BY ID
+    // http://localhost:4444/category/api/v1/delete/1
     @Override
-    @PutMapping("/delete/{id}")
-    public ResponseEntity categoryApiDelete(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(iCategoryServices.categoryServiceDelete(id));
+    @DeleteMapping(value="/delete/{id}")
+    public ResponseEntity<?> categoryApiDeleteById(@PathVariable(name = "id") Long id) {
+        return new ResponseEntity<>(iCategoryServices.categoryServiceDeleteById(id), HttpStatus.OK);
     }
 
+    ///////////////////////////////////////////////////////
+    // ALL DELETE
     @Override
-    @GetMapping(value = "/all/delete")
     public ResponseEntity<String> categoryApiAllDelete() {
-        return ResponseEntity.ok(iCategoryServices.categoryServiceAllDelete());
+        return null;
     }
 
+    // SPEED DATA
     @Override
     public ResponseEntity<List<CategoryDto>> categoryApiSpeedData(Long key) {
-        return ResponseEntity.ok(iCategoryServices.categoryServiceSpeedData(key));
+        return null;
     }
-}
+
+} //end class
