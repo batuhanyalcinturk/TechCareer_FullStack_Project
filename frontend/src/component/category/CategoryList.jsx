@@ -1,15 +1,35 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import CategoryApi from '../../services/CategoryApi'
 
 // FUNCTION
-export default function CategoryList() {
+export default function CategoryList(props) {
 
   // REDIRECT
   let navigate = useNavigate();
 
   // STATE
   const [CategoryStateApi, setCategoryStateApi] = useState([]);
+
+  const {t} = props;
+
+  useEffect(() => {
+    CategoryApi.categoryApiList()
+      .then((response) => {
+        console.log(response.data);
+        setCategoryStateApi(response.data);
+      })
+      .catch((err) => { console.error(err); });
+
+    // axios.get("http://localhost:4444/category/api/v1/list")
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     setCategoryStateApi(response.data);
+    //   })
+    //   .catch((err) => { console.error(err); });
+  }, []);
+
 
   // USEEFFECT
   useEffect(() => {
@@ -83,19 +103,19 @@ export default function CategoryList() {
                 <td>{data.systemDate}</td>
 
                 <td>
-                  <Link to="/category/update">
+                  <Link to={`/category/update/${data.id}`}>
                   <i onClick={()=>setUpdateCategory(data)} class="fa-solid fa-pen-to-square text-primary"></i>
                   </Link>
                   </td>
 
                 <td>
-                <Link to="/category/view">
+                <Link to={`/category/view/${data.id}`}>
                   <i onClick={()=>setViewCategory(data.id)} class="fa-solid fa-expand text-warning"></i>
                   </Link>
                   </td>
 
                 <td>
-                <Link to="/category/delete">
+                <Link to={`/category/delete/${data.id}`}>
                   <i onClick={()=>setDeleteCategory(data.id)} class="fa-solid fa-trash text-danger"></i>
                   </Link>
                   </td>
