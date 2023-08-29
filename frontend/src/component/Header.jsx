@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 
 // I18N
 import { withTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 // CLASS COMPONENT
 class Header extends Component {
@@ -33,9 +34,8 @@ class Header extends Component {
             <React.Fragment>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                     <div className="container">
-                        <a className="navbar-brand" href="#">
-                            <i class={this.props.logo}></i>
-                        </a>
+                        
+                    <Link className="navbar-brand" to="category/list"> <i className={this.props.logo}></i></Link>
                         <button
                             className="navbar-toggler d-lg-none"
                             type="button"

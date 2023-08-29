@@ -23,8 +23,8 @@ export default function CategoryView() {
     //1.YOL (ID)
     setID(localStorage.getItem("category_view_id"));
     //CategoryApi.categoryApiFindById(localStorage.getItem("category_view_id"))
-      //CategoryApi.categoryApiFindById(viewID.id)
-      axios.get(`http://localhost:4444/category/api/v1/find/${id}`)
+    //CategoryApi.categoryApiFindById(viewID.id)
+    axios.get(`http://localhost:4444/category/api/v1/find/${id}`)
       //axios.get(`http://localhost:4444/category/api/v1/find/${viewID.id}`)
       .then((response) => {
         console.log(response.data);
@@ -39,8 +39,9 @@ export default function CategoryView() {
     <div>
       <div class="card">
         <div class="card-body">
-        <img src={moon} alt="" style={{maxWidth:"75%"}} />
-          <h6 class="card-title"> {viewApi.categoryName}</h6>
+          <img src={moon} alt="" style={{ maxWidth: "75%" }} />
+          <h5 class="card-title"> {viewApi.id}</h5>
+          <p class="card-title"> {viewApi.categoryName}</p>
           <p class="card-text">  {viewApi.systemDate}</p>
         </div>
       </div>

@@ -24,7 +24,6 @@ import java.util.UUID;
 @Component
 public class CommandLineRunnerBean {
 
-
     // Injection
     private final ICategoryServices iCategoryServices;
     private final ICategoryRepository iCategoryRepository;
